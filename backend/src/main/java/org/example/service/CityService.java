@@ -27,6 +27,12 @@ public class CityService {
                 .orElseThrow(() -> new EntityNotFoundException("City not found with id " + id));
     }
 
+    public CityDTO getCityByName(String name) {
+        return cityRepository.findByName(name)
+                .map(cityMapper::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("City not found with id " + name));
+    }
+
     public CityDTO createCity(CityDTO dto) {
         City city = cityMapper.toEntity(dto);
         City saved = cityRepository.save(city);

@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.CityDTO;
 import org.example.service.CityService;
@@ -26,6 +27,12 @@ public class CityController {
     @GetMapping("/{id}")
     public ResponseEntity<CityDTO> getCityById(@PathVariable Long id) {
         CityDTO dto = cityService.getCityById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/by-name")
+    public ResponseEntity<CityDTO> getCityByName(@RequestParam @NotBlank String name) {
+        CityDTO dto = cityService.getCityByName(name);
         return ResponseEntity.ok(dto);
     }
 
