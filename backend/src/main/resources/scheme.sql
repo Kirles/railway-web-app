@@ -3,13 +3,13 @@ CREATE SCHEMA IF NOT EXISTS railway;
 SET search_path TO railway;
 
 -- Таблица городов/населенных пунктов
-CREATE TABLE cities (
+CREATE TABLE IF NOT EXISTS cities (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     region VARCHAR(255)
 );
 -- Таблица железнодорожных станций
-CREATE TABLE stations (
+CREATE TABLE IF NOT EXISTS stations (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     code VARCHAR(20) UNIQUE NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE stations (
 );
 
 -- Таблица поездов
-CREATE TABLE trains (
+CREATE TABLE IF NOT EXISTS trains (
     id SERIAL PRIMARY KEY,
     number VARCHAR(20) UNIQUE NOT NULL,
     name VARCHAR(255),
@@ -27,7 +27,7 @@ CREATE TABLE trains (
 );
 
 -- Таблица маршрутов
-CREATE TABLE routes (
+CREATE TABLE IF NOT EXISTS routes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     departure_station_id INTEGER REFERENCES stations(id),
@@ -37,7 +37,7 @@ CREATE TABLE routes (
 );
 
 -- Таблица промежуточных станций маршрута
-CREATE TABLE route_stations (
+CREATE TABLE IF NOT EXISTS route_stations (
     id SERIAL PRIMARY KEY,
     route_id INTEGER REFERENCES routes(id) ON DELETE CASCADE,
     station_id INTEGER REFERENCES stations(id),
@@ -47,7 +47,7 @@ CREATE TABLE route_stations (
 );
 
 -- Таблица рейсов
-CREATE TABLE trips (
+CREATE TABLE IF NOT EXISTS trips (
     id SERIAL PRIMARY KEY,
     train_id INTEGER REFERENCES trains(id),
     route_id INTEGER REFERENCES routes(id),
@@ -60,7 +60,7 @@ CREATE TABLE trips (
 );
 
 -- Таблица вагонов
-CREATE TABLE cars (
+CREATE TABLE IF NOT EXISTS cars (
     id SERIAL PRIMARY KEY,
     train_id INTEGER REFERENCES trains(id),
     car_type VARCHAR(100) NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE cars (
 );
 
 -- Таблица мест в вагонах
-CREATE TABLE seats (
+CREATE TABLE IF NOT EXISTS seats (
     id SERIAL PRIMARY KEY,
     car_id INTEGER REFERENCES cars(id),
     seat_number INTEGER NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE seats (
 );
 
 -- Таблица пассажиров
-CREATE TABLE passengers (
+CREATE TABLE IF NOT EXISTS passengers (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE passengers (
 );
 
 -- Таблица бронирований/билетов
-CREATE TABLE bookings (
+CREATE TABLE IF NOT EXISTS bookings (
     id SERIAL PRIMARY KEY,
     trip_id INTEGER REFERENCES trips(id),
     passenger_id INTEGER REFERENCES passengers(id),
@@ -99,7 +99,7 @@ CREATE TABLE bookings (
 );
 
 -- Таблица расписания по станциям
-CREATE TABLE trip_schedules (
+CREATE TABLE IF NOT EXISTS trip_schedules (
     id SERIAL PRIMARY KEY,
     trip_id INTEGER REFERENCES trips(id),
     station_id INTEGER REFERENCES stations(id),
@@ -110,11 +110,11 @@ CREATE TABLE trip_schedules (
 );
 
 -- Индексы для оптимизации запросов
-CREATE INDEX idx_trips_departure_date ON trips(departure_date);
-CREATE INDEX idx_trips_route_id ON trips(route_id);
-CREATE INDEX idx_trips_train_id ON trips(train_id);
-CREATE INDEX idx_bookings_trip_id ON bookings(trip_id);
-CREATE INDEX idx_bookings_passenger_id ON bookings(passenger_id);
-CREATE INDEX idx_stations_code ON stations(code);
-CREATE INDEX idx_trip_schedules_trip_id ON trip_schedules(trip_id);
-CREATE INDEX idx_route_stations_order ON route_stations(route_id, station_order);
+CREATE INDEX IF NOT EXISTS idx_trips_departure_date ON trips(departure_date);
+CREATE INDEX IF NOT EXISTS idx_trips_route_id ON trips(route_id);
+CREATE INDEX IF NOT EXISTS idx_trips_train_id ON trips(train_id);
+CREATE INDEX IF NOT EXISTS idx_bookings_trip_id ON bookings(trip_id);
+CREATE INDEX IF NOT EXISTS idx_bookings_passenger_id ON bookings(passenger_id);
+CREATE INDEX IF NOT EXISTS idx_stations_code ON stations(code);
+CREATE INDEX IF NOT EXISTS idx_trip_schedules_trip_id ON trip_schedules(trip_id);
+CREATE INDEX IF NOT EXISTS idx_route_stations_order ON route_stations(route_id, station_order);

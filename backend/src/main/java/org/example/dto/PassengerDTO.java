@@ -8,12 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PassengerDto {
+public class PassengerDTO {
     private Long id;
 
     @NotBlank(message = "Имя обязательно")
@@ -34,4 +35,6 @@ public class PassengerDto {
     @Past(message = "Дата рождения должна быть в прошлом")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
+    private List<BookingDTO> bookings;
 }

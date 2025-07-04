@@ -1,31 +1,28 @@
 package org.example.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripScheduleDto {
+public class RouteStationDTO {
     private Long id;
 
+    @NotNull(message = "Маршрут обязателен")
+    private RouteDTO route;
+
     @NotNull(message = "Станция обязательна")
-    private StationDto station;
-
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime arrivalTime;
-
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime departureTime;
+    private StationDTO station;
 
     @NotNull(message = "Порядок станции обязателен")
     @Min(value = 1, message = "Порядок станции должен быть больше 0")
     private Integer stationOrder;
+
+    @Min(value = 0, message = "Время стоянки не может быть отрицательным")
+    private Integer stopDurationMinutes;
 }

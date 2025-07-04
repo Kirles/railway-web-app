@@ -12,8 +12,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarDto {
+public class CarDTO {
     private Long id;
+
+    @NotBlank(message = "Поезд обязателен")
+    private TrainDTO train;
 
     @NotBlank(message = "Тип вагона обязателен")
     @Size(max = 100, message = "Тип вагона не должен превышать 100 символов")
@@ -27,5 +30,5 @@ public class CarDto {
     @Min(value = 1, message = "Количество мест должно быть больше 0")
     private Integer totalSeats;
 
-    private List<SeatDto> seats;
+    private List<SeatDTO> seats;
 }

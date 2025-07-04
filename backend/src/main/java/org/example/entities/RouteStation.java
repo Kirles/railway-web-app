@@ -30,5 +30,5 @@ public class RouteStation {
     private Integer stationOrder;
 
     @Column(name = "stop_duration_minutes")
-    private Integer stopDurationMinutes = 5;
+    private Integer stopDurationMinutes;
 }

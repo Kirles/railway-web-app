@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RouteDto {
+public class RouteDTO {
     private Long id;
 
     @NotBlank(message = "Название маршрута обязательно")
@@ -20,10 +20,10 @@ public class RouteDto {
     private String name;
 
     @NotNull(message = "Станция отправления обязательна")
-    private StationDto departureStation;
+    private StationDTO departureStation;
 
     @NotNull(message = "Станция прибытия обязательна")
-    private StationDto arrivalStation;
+    private StationDTO arrivalStation;
 
     @Min(value = 1, message = "Расстояние должно быть больше 0")
     private Integer distanceKm;
@@ -31,5 +31,7 @@ public class RouteDto {
     @Min(value = 1, message = "Время в пути должно быть больше 0")
     private Integer durationMinutes;
 
-    private List<RouteStationDto> routeStations;
+    private List<RouteStationDTO> routeStations;
+
+    private List<TripDTO> trips;
 }

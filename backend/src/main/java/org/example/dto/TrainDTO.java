@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainDto {
+public class TrainDTO {
     private Long id;
 
     @NotBlank(message = "Номер поезда обязателен")
@@ -29,5 +29,7 @@ public class TrainDto {
     @Min(value = 1, message = "Количество мест должно быть больше 0")
     private Integer totalSeats;
 
-    private List<CarDto> cars;
+    private List<CarDTO> cars;
+
+    private List<TripDTO> trips;
 }

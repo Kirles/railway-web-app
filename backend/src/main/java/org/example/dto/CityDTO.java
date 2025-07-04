@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityDto {
+public class CityDTO {
     private Long id;
 
     @NotBlank(message = "Название города обязательно")
@@ -22,5 +22,5 @@ public class CityDto {
     @Size(max = 255, message = "Название региона не должно превышать 255 символов")
     private String region;
 
-    private List<StationDto> stations;
+    private List<StationDTO> stations;
 }

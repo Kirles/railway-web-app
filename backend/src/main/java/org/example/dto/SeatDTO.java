@@ -6,20 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeatDto {
+public class SeatDTO {
     private Long id;
+
+    @NotNull(message = "Вагон обязателен")
+    private CarDTO car;
 
     @NotNull(message = "Номер места обязателен")
     @Min(value = 1, message = "Номер места должен быть больше 0")
     private Integer seatNumber;
 
-    private Boolean isAvailable;
+    private Boolean isAvailable = true;
 
-    private Long carId;
-    private Integer carNumber;
-    private String carType;
+    private List<BookingDTO> bookings;
 }

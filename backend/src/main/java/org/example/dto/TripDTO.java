@@ -7,20 +7,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripDto {
+public class TripDTO {
     private Long id;
 
     @NotNull(message = "Поезд обязателен")
-    private TripDto train;
+    private TripDTO train;
 
     @NotNull(message = "Маршрут обязателен")
-    private RouteDto route;
+    private RouteDTO route;
 
     @NotNull(message = "Дата отправления обязательна")
     @Future(message = "Дата отправления должна быть в будущем")
@@ -46,5 +49,7 @@ public class TripDto {
     @Digits(integer = 8, fraction = 2, message = "Неверный формат цены")
     private BigDecimal basePrice;
 
-    private List<TripScheduleDto> tripSchedules;
+    private List<BookingDTO> bookings;
+
+    private List<TripScheduleDTO> tripSchedules;
 }

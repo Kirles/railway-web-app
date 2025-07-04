@@ -14,17 +14,17 @@ import java.time.ZonedDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingDto {
+public class BookingDTO {
     private Long id;
 
     @NotNull(message = "Рейс обязателен")
-    private TripDto trip;
+    private TripDTO trip;
 
     @NotNull(message = "Пассажир обязателен")
-    private PassengerDto passenger;
+    private PassengerDTO passenger;
 
     @NotNull(message = "Место обязательно")
-    private SeatDto seat;
+    private SeatDTO seat;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private ZonedDateTime bookingDate;

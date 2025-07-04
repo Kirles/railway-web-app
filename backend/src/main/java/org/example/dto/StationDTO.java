@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StationDto {
+public class StationDTO {
     private Long id;
 
     @NotBlank(message = "Название станции обязательно")
@@ -22,7 +24,11 @@ public class StationDto {
     private String code;
 
     @NotNull(message = "Город обязателен")
-    private CityDto city;
+    private String city;
 
     private String address;
+
+    private List<RouteStationDTO> routeStations;
+
+    private List<TripScheduleDTO> tripSchedules;
 }
