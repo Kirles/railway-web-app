@@ -7,7 +7,6 @@ import org.example.entities.City;
 import org.example.mapper.CityMapper;
 import org.example.repository.CityRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,8 +16,8 @@ public class CityService {
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
 
-    public List<CityDTO> getAllCities(){
-        return cityRepository.findAll().stream().map(cityMapper::toDTO).toList();
+    public List<CityDTO> getAllCities() {
+        return cityRepository.findAll().stream().map(cityMapper::toDTOWithStations).toList();
     }
 
     public CityDTO getCityById(Long id) {
@@ -30,7 +29,7 @@ public class CityService {
     public CityDTO getCityByName(String name) {
         return cityRepository.findByName(name)
                 .map(cityMapper::toDTO)
-                .orElseThrow(() -> new EntityNotFoundException("City not found with id " + name));
+                .orElseThrow(() -> new EntityNotFoundException("City not found with name " + name));
     }
 
     public CityDTO createCity(CityDTO dto) {

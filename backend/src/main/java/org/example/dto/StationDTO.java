@@ -26,6 +26,7 @@ public class StationDTO {
     @NotNull(message = "Город обязателен")
     private String city;
 
+    @NotNull(message = "Адрес обязателен")
     private String address;
 
     private List<RouteStationDTO> routeStations;
