@@ -14,10 +14,10 @@ public class RouteStationDTO {
     private Long id;
 
     @NotNull(message = "Маршрут обязателен")
-    private RouteDTO route;
+    private String route;
 
     @NotNull(message = "Станция обязательна")
-    private StationDTO station;
+    private String station;
 
     @NotNull(message = "Порядок станции обязателен")
     @Min(value = 1, message = "Порядок станции должен быть больше 0")

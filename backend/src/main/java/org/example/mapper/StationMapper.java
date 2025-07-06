@@ -13,6 +13,8 @@ import java.util.List;
 public interface StationMapper {
 
     @Mapping(target = "city", source = "city.name")
+    @Mapping(target = "routeStations", ignore = true)
+    @Mapping(target = "tripSchedules", ignore = true)
     StationDTO toDTO(Station station);
 
     @Mapping(target = "city", expression = "java(map(stationDTO.getCity(), cityRepository))")
@@ -21,6 +23,9 @@ public interface StationMapper {
     Station toEntity(StationDTO stationDTO, @Context CityRepository cityRepository);
 
     List<StationDTO> toDTOList(List<Station> stations);
+
+//    @Mapping(target = "routeStations", source = "routeStations")
+//    StationDTO toFullDTO(Station station);
 
     default City map(String cityName, @Context CityRepository cityRepository) {
         if (cityName == null) {
