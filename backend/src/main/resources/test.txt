@@ -1,0 +1,15 @@
+{
+    "route": "Рейс 12А",
+    "station": "Станция 1",
+    "stationOrder": 1,
+    "stopDurationMinutes": 5
+}
+
+{
+    "name": "Киев - Харьков",
+    "departureStation": "Станция 1",
+    "arrivalStation": "Станция 2",
+    "distanceKm": 550,
+    "durationMinutes": 540
+}
+
