@@ -12,7 +12,7 @@ public interface CityMapper {
 
     @Named("toDTOWithoutStations")
     @Mapping(target = "stations", ignore = true)
-    CityDTO toDTO(City city );
+    CityDTO toDTO(City city);
 
     @Mapping(target = "stations", ignore = true)
     City toEntity(CityDTO cityDTO);

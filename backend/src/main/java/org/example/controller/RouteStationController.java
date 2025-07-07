@@ -31,14 +31,14 @@ public class RouteStationController {
 
     @PostMapping
     public ResponseEntity<RouteStationDTO> createRouteStation(@Valid @RequestBody RouteStationDTO dto) {
-        RouteStationDTO createdCity  = routeStationService.createRouteStation(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
+        RouteStationDTO createdRouteStation  = routeStationService.createRouteStation(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRouteStation);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<RouteStationDTO> updateRouteStation(@PathVariable Long id, @RequestBody RouteStationDTO dto) {
-        RouteStationDTO updatedCity = routeStationService.updateRouteStation(id, dto);
-        return ResponseEntity.ok(updatedCity);
+        RouteStationDTO updatedRouteStation = routeStationService.updateRouteStation(id, dto);
+        return ResponseEntity.ok(updatedRouteStation);
     }
 
     @DeleteMapping("/{id}")

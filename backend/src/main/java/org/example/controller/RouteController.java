@@ -32,14 +32,14 @@ public class RouteController {
 
     @PostMapping
     public ResponseEntity<RouteDTO> createRoute(@Valid @RequestBody RouteDTO dto) {
-        RouteDTO createdCity  = routeService.createRoute(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
+        RouteDTO createdRoute = routeService.createRoute(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRoute);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<RouteDTO> updateRoute(@PathVariable Long id, @RequestBody RouteDTO dto) {
-        RouteDTO updatedCity = routeService.updateRoute(id, dto);
-        return ResponseEntity.ok(updatedCity);
+        RouteDTO updatedRoute = routeService.updateRoute(id, dto);
+        return ResponseEntity.ok(updatedRoute);
     }
 
     @DeleteMapping("/{id}")

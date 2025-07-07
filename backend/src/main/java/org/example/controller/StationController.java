@@ -44,14 +44,14 @@ public class StationController {
 
     @PostMapping
     public ResponseEntity<StationDTO> createStation(@Valid @RequestBody StationDTO dto) {
-        StationDTO createdCity  = stationService.createStation(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
+        StationDTO createdStation  = stationService.createStation(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStation);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<StationDTO> updateStation(@PathVariable Long id, @RequestBody StationDTO dto) {
-        StationDTO updatedCity = stationService.updateStation(id, dto);
-        return ResponseEntity.ok(updatedCity);
+        StationDTO updatedStation = stationService.updateStation(id, dto);
+        return ResponseEntity.ok(updatedStation);
     }
 
     @DeleteMapping("/{id}")

@@ -16,7 +16,7 @@ public class CarDTO {
     private Long id;
 
     @NotBlank(message = "Поезд обязателен")
-    private TrainDTO train;
+    private String train;
 
     @NotBlank(message = "Тип вагона обязателен")
     @Size(max = 100, message = "Тип вагона не должен превышать 100 символов")

@@ -32,13 +32,13 @@ public interface TripMapper {
             return null;
         }
         return trainRepository.findByNumber(trainNumber)
-                .orElseThrow(() -> new RuntimeException("Station not found: " + trainNumber));
+                .orElseThrow(() -> new RuntimeException("Train not found: " + trainNumber));
     }
     default Route mapRoute(String routeName, @Context RouteRepository routeRepository) {
         if (routeName == null) {
             return null;
         }
         return routeRepository.findByName(routeName)
-                .orElseThrow(() -> new RuntimeException("Station not found: " + routeName));
+                .orElseThrow(() -> new RuntimeException("Route not found: " + routeName));
     }
 }
