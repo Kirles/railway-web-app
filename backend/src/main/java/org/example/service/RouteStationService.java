@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.RouteStationDTO;
 import org.example.entities.RouteStation;
 import org.example.mapper.CityMapper;
+import org.example.mapper.RouteMapper;
 import org.example.mapper.RouteStationMapper;
 import org.example.mapper.StationMapper;
 import org.example.repository.CityRepository;
@@ -25,6 +26,8 @@ public class RouteStationService {
     private final RouteRepository routeRepository;
     private final CityRepository cityRepository;
     private final StationService stationService;
+    private final RouteService routeService;
+    private final RouteMapper routeMapper;
     private final RouteStationMapper routeStationMapper;
     private final StationMapper stationMapper;
 
@@ -45,10 +48,13 @@ public class RouteStationService {
     }
 
     public RouteStationDTO updateRouteStation(Long id, RouteStationDTO dto) {
-        RouteStation station = routeStationRepository.findById(id)
+        RouteStation routeStation = routeStationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Route station not found with id " + id));
-        station.setStation(stationMapper.toEntity(stationService.getStationByName(dto.getStation()), cityRepository));
-        return routeStationMapper.toDTO(routeStationRepository.save(station));
+        routeStation.setRoute(routeMapper.toEntity(routeService.getRouteByName(dto.getRoute()), stationRepository));
+        routeStation.setStation(stationMapper.toEntity(stationService.getStationByName(dto.getStation()), cityRepository));
+        routeStation.setStationOrder(dto.getStationOrder());
+        routeStation.setStopDurationMinutes(dto.getStopDurationMinutes());
+        return routeStationMapper.toDTO(routeStationRepository.save(routeStation));
     }
 
     public void deleteRouteStation(Long id) {

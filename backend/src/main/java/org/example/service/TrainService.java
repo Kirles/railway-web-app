@@ -29,6 +29,12 @@ public class TrainService {
                 .orElseThrow(() -> new EntityNotFoundException("Train not found with id " + id));
     }
 
+    public TrainDTO getTrainByNumber(String number) {
+        return trainRepository.findByNumber(number)
+                .map(trainMapper::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Train not found with number " + number));
+    }
+
     public TrainDTO createTrain(TrainDTO dto) {
         Train train = trainMapper.toEntity(dto);
         Train saved = trainRepository.save(train);
@@ -38,7 +44,6 @@ public class TrainService {
     public TrainDTO updateTrain(Long id, TrainDTO dto) {
         Train train = trainRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Train not found with id " + id));
-        train.setId(dto.getId());
         train.setNumber(dto.getNumber());
         train.setName(dto.getName());
         train.setTrainType(dto.getTrainType());

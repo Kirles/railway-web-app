@@ -35,6 +35,12 @@ public class RouteService {
                 .orElseThrow(() -> new EntityNotFoundException("Route not found with id " + id));
     }
 
+    public RouteDTO getRouteByName(String name) {
+        return routeRepository.findByName(name)
+                .map(routeMapper::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Route not found with name " + name));
+    }
+
     public RouteDTO createRoute(RouteDTO dto) {
         Route route = routeMapper.toEntity(dto, stationRepository);
         Route saved = routeRepository.save(route);
