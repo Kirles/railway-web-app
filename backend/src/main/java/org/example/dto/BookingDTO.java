@@ -18,13 +18,13 @@ public class BookingDTO {
     private Long id;
 
     @NotNull(message = "Рейс обязателен")
-    private TripDTO trip;
+    private Long trip;
 
     @NotNull(message = "Пассажир обязателен")
-    private PassengerDTO passenger;
+    private Long passenger;
 
     @NotNull(message = "Место обязательно")
-    private SeatDTO seat;
+    private Long seat;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private ZonedDateTime bookingDate;
