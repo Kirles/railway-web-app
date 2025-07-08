@@ -28,8 +28,8 @@ public class CarController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CarDTO> getCarById(@PathVariable Long id) {
-        CarDTO dto = carService.getCarById(id);
-        return ResponseEntity.ok(dto);
+        CarDTO car = carService.getCarById(id);
+        return ResponseEntity.ok(car);
     }
 
     @PostMapping

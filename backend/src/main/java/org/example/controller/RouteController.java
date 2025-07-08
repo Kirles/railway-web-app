@@ -20,14 +20,14 @@ public class RouteController {
 
     @GetMapping
     public ResponseEntity<List<RouteDTO>> getAllRoutes() {
-        List<RouteDTO> cities = routeService.getAllRoutes();
-        return ResponseEntity.ok(cities);
+        List<RouteDTO> routes = routeService.getAllRoutes();
+        return ResponseEntity.ok(routes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RouteDTO> getRouteById(@PathVariable Long id) {
-        RouteDTO dto = routeService.getRouteById(id);
-        return ResponseEntity.ok(dto);
+        RouteDTO route = routeService.getRouteById(id);
+        return ResponseEntity.ok(route);
     }
 
     @PostMapping

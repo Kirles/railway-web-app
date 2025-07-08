@@ -25,8 +25,8 @@ public class TrainController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TrainDTO> getTrainById(@PathVariable Long id) {
-        TrainDTO dto = trainService.getTrainById(id);
-        return ResponseEntity.ok(dto);
+        TrainDTO train = trainService.getTrainById(id);
+        return ResponseEntity.ok(train);
     }
 
     @PostMapping

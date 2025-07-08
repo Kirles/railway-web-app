@@ -20,26 +20,26 @@ public class StationController {
 
     @GetMapping
     public ResponseEntity<List<StationDTO>> getAllStations() {
-        List<StationDTO> cities = stationService.getAllStations();
-        return ResponseEntity.ok(cities);
+        List<StationDTO> stations = stationService.getAllStations();
+        return ResponseEntity.ok(stations);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<StationDTO> getStationById(@PathVariable Long id) {
-        StationDTO dto = stationService.getStationById(id);
-        return ResponseEntity.ok(dto);
+        StationDTO station = stationService.getStationById(id);
+        return ResponseEntity.ok(station);
     }
 
     @GetMapping("/by-name")
     public ResponseEntity<StationDTO> getStationByName(@RequestParam @NotBlank String name) {
-        StationDTO dto = stationService.getStationByName(name);
-        return ResponseEntity.ok(dto);
+        StationDTO station = stationService.getStationByName(name);
+        return ResponseEntity.ok(station);
     }
 
     @GetMapping("/by-code")
     public ResponseEntity<StationDTO> getStationByCode(@RequestParam @NotBlank String code) {
-        StationDTO dto = stationService.getStationByCode(code);
-        return ResponseEntity.ok(dto);
+        StationDTO station = stationService.getStationByCode(code);
+        return ResponseEntity.ok(station);
     }
 
     @PostMapping

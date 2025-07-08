@@ -26,14 +26,14 @@ public class CityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CityDTO> getCityById(@PathVariable Long id) {
-        CityDTO dto = cityService.getCityById(id);
-        return ResponseEntity.ok(dto);
+        CityDTO city = cityService.getCityById(id);
+        return ResponseEntity.ok(city);
     }
 
     @GetMapping("/by-name")
     public ResponseEntity<CityDTO> getCityByName(@RequestParam @NotBlank String name) {
-        CityDTO dto = cityService.getCityByName(name);
-        return ResponseEntity.ok(dto);
+        CityDTO city = cityService.getCityByName(name);
+        return ResponseEntity.ok(city);
     }
 
     @PostMapping

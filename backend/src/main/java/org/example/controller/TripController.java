@@ -19,14 +19,14 @@ public class TripController {
 
     @GetMapping
     public ResponseEntity<List<TripDTO>> getAllTrips() {
-        List<TripDTO> cities = tripService.getAllTrips();
-        return ResponseEntity.ok(cities);
+        List<TripDTO> trips = tripService.getAllTrips();
+        return ResponseEntity.ok(trips);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TripDTO> getTripById(@PathVariable Long id) {
-        TripDTO dto = tripService.getTripById(id);
-        return ResponseEntity.ok(dto);
+        TripDTO trip = tripService.getTripById(id);
+        return ResponseEntity.ok(trip);
     }
 
     @PostMapping

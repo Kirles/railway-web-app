@@ -20,14 +20,14 @@ public class SeatController {
 
     @GetMapping
     public ResponseEntity<List<SeatDTO>> getAllSeats() {
-        List<SeatDTO> cities = seatService.getAllSeats();
-        return ResponseEntity.ok(cities);
+        List<SeatDTO> seats = seatService.getAllSeats();
+        return ResponseEntity.ok(seats);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SeatDTO> getSeatById(@PathVariable Long id) {
-        SeatDTO dto = seatService.getSeatById(id);
-        return ResponseEntity.ok(dto);
+        SeatDTO seat = seatService.getSeatById(id);
+        return ResponseEntity.ok(seat);
     }
 
     @PostMapping
