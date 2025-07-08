@@ -16,7 +16,7 @@ public class SeatDTO {
     private Long id;
 
     @NotNull(message = "Вагон обязателен")
-    private CarDTO car;
+    private Long car;
 
     @NotNull(message = "Номер места обязателен")
     @Min(value = 1, message = "Номер места должен быть больше 0")
