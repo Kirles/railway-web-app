@@ -32,14 +32,14 @@ public class SeatController {
 
     @PostMapping
     public ResponseEntity<SeatDTO> createSeat(@Valid @RequestBody SeatDTO dto) {
-        SeatDTO createdCity  = seatService.createSeat(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
+        SeatDTO createdSeat  = seatService.createSeat(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSeat);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SeatDTO> updateSeat(@PathVariable Long id, @RequestBody SeatDTO dto) {
-        SeatDTO updatedCity = seatService.updateSeat(id, dto);
-        return ResponseEntity.ok(updatedCity);
+        SeatDTO updatedSeat = seatService.updateSeat(id, dto);
+        return ResponseEntity.ok(updatedSeat);
     }
 
     @DeleteMapping("/{id}")
