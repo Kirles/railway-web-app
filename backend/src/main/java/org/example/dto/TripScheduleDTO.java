@@ -17,10 +17,10 @@ public class TripScheduleDTO {
     private Long id;
 
     @NotNull(message = "Рейс обязателен")
-    private String trip;
+    private Long trip;
 
     @NotNull(message = "Станция обязательна")
-    private String station;
+    private Long station;
 
     @JsonFormat(pattern = "HH:mm")
     private LocalTime arrivalTime;
