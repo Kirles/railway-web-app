@@ -24,7 +24,7 @@ public class StationDTO {
     private String code;
 
     @NotNull(message = "Город обязателен")
-    private String city;
+    private Long city;
 
     @NotNull(message = "Адрес обязателен")
     private String address;

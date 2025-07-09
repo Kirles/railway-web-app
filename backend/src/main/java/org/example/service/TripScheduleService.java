@@ -4,10 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.TripScheduleDTO;
 import org.example.entities.TripSchedule;
+import org.example.mapper.StationMapper;
+import org.example.mapper.TripMapper;
 import org.example.mapper.TripScheduleMapper;
-import org.example.repository.StationRepository;
-import org.example.repository.TripRepository;
-import org.example.repository.TripScheduleRepository;
+import org.example.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +17,16 @@ import java.util.List;
 public class TripScheduleService {
 
     private final TripScheduleRepository tripScheduleRepository;
+    private final CityRepository cityRepository;
     private final TripRepository tripRepository;
+    private final TrainRepository trainRepository;
+    private final RouteRepository routeRepository;
     private final StationRepository stationRepository;
     private final TripScheduleMapper tripScheduleMapper;
+    private final TripMapper tripMapper;
+    private final StationMapper stationMapper;
+    private final TripService tripService;
+    private final StationService stationService;
 
     public List<TripScheduleDTO> getAllTripSchedules() {
         return tripScheduleRepository.findAll().stream().map(tripScheduleMapper::toDTO).toList();
@@ -40,6 +47,11 @@ public class TripScheduleService {
     public TripScheduleDTO updateTripSchedule(Long id, TripScheduleDTO dto) {
         TripSchedule tripSchedule = tripScheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Trip Schedule not found with id " + id));
+        tripSchedule.setTrip(tripMapper.toEntity(tripService.getTripById(dto.getTrip()), trainRepository, routeRepository));
+        tripSchedule.setStation(stationMapper.toEntity(stationService.getStationById(dto.getStation()), cityRepository));
+        tripSchedule.setArrivalTime(dto.getArrivalTime());
+        tripSchedule.setDepartureTime(dto.getDepartureTime());
+        tripSchedule.setStationOrder(dto.getStationOrder());
         return tripScheduleMapper.toDTO(tripScheduleRepository.save(tripSchedule));
     }
 

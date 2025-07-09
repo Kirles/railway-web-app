@@ -54,7 +54,7 @@ public class StationService {
                 .orElseThrow(() -> new EntityNotFoundException("Station not found with id " + id));
         station.setName(dto.getName());
         station.setCode(dto.getCode());
-        station.setCity(cityMapper.toEntity(cityService.getCityByName(dto.getCity())));
+        station.setCity(cityMapper.toEntity(cityService.getCityById(dto.getCity())));
         station.setAddress(dto.getAddress());
         return stationMapper.toDTO(stationRepository.save(station));
     }

@@ -51,8 +51,8 @@ public class RouteService {
         Route route = routeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Route not found with id " + id));
         route.setName(dto.getName());
-        route.setDepartureStation(stationMapper.toEntity(stationService.getStationByName(dto.getDepartureStation()), cityRepository));
-        route.setArrivalStation(stationMapper.toEntity(stationService.getStationByName(dto.getArrivalStation()), cityRepository));
+        route.setDepartureStation(stationMapper.toEntity(stationService.getStationById(dto.getDepartureStation()), cityRepository));
+        route.setArrivalStation(stationMapper.toEntity(stationService.getStationById(dto.getArrivalStation()), cityRepository));
         route.setDistanceKm(dto.getDistanceKm());
         route.setDurationMinutes(dto.getDurationMinutes());
         return routeMapper.toDTO(routeRepository.save(route));

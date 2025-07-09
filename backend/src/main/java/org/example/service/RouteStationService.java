@@ -50,8 +50,8 @@ public class RouteStationService {
     public RouteStationDTO updateRouteStation(Long id, RouteStationDTO dto) {
         RouteStation routeStation = routeStationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Route station not found with id " + id));
-        routeStation.setRoute(routeMapper.toEntity(routeService.getRouteByName(dto.getRoute()), stationRepository));
-        routeStation.setStation(stationMapper.toEntity(stationService.getStationByName(dto.getStation()), cityRepository));
+        routeStation.setRoute(routeMapper.toEntity(routeService.getRouteById(dto.getRoute()), stationRepository));
+        routeStation.setStation(stationMapper.toEntity(stationService.getStationById(dto.getStation()), cityRepository));
         routeStation.setStationOrder(dto.getStationOrder());
         routeStation.setStopDurationMinutes(dto.getStopDurationMinutes());
         return routeStationMapper.toDTO(routeStationRepository.save(routeStation));

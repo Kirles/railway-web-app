@@ -11,24 +11,21 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface RouteMapper {
 
-    @Mapping(target = "departureStation", source = "departureStation.name")
-    @Mapping(target = "arrivalStation", source = "arrivalStation.name")
+    @Mapping(target = "departureStation", source = "departureStation.id")
+    @Mapping(target = "arrivalStation", source = "arrivalStation.id")
     @Mapping(target = "routeStations", ignore = true)
     @Mapping(target = "trips", ignore = true)
     RouteDTO toDTO(Route route);
 
-    @Mapping(target = "departureStation", expression = "java(map(routeDTO.getDepartureStation(), stationRepository))")
-    @Mapping(target = "arrivalStation", expression = "java(map(routeDTO.getArrivalStation(), stationRepository))")
+    @Mapping(target = "departureStation", expression = "java(mapStation(routeDTO.getDepartureStation(), stationRepository))")
+    @Mapping(target = "arrivalStation", expression = "java(mapStation(routeDTO.getArrivalStation(), stationRepository))")
     @Mapping(target = "routeStations", ignore = true)
     @Mapping(target = "trips", ignore = true)
     Route toEntity(RouteDTO routeDTO, @Context StationRepository stationRepository);
 
-    default Station map(String stationName, @Context StationRepository stationRepository){
-        if(stationName == null){
-            return null;
-        }
-        return stationRepository.findByName(stationName)
-                .orElseThrow(() -> new RuntimeException("Station not found: " + stationName));
+    default Station mapStation(Long stationId, @Context StationRepository stationRepository){
+        return stationRepository.findById(stationId)
+                .orElseThrow(() -> new RuntimeException("Station not found: " + stationId));
     }
 
 }

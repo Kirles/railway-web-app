@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
@@ -22,6 +21,7 @@ public class SeatDTO {
     @Min(value = 1, message = "Номер места должен быть больше 0")
     private Integer seatNumber;
 
+    @Builder.Default
     private Boolean isAvailable = true;
 
     private List<BookingDTO> bookings;

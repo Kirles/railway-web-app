@@ -36,6 +36,11 @@ public class PassengerService {
     public PassengerDTO updatePassenger(Long id, PassengerDTO dto) {
         Passenger passenger = passengerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Passenger not found with id " + id));
+        passenger.setFirstName(dto.getFirstName());
+        passenger.setLastName(dto.getLastName());
+        passenger.setDocumentNumber(dto.getDocumentNumber());
+        passenger.setPhone(dto.getPhone());
+        passenger.setBirthDate(dto.getBirthDate());
         return passengerMapper.toDTO(passengerRepository.save(passenger));
     }
 

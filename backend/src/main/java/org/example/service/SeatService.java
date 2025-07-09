@@ -46,7 +46,6 @@ public class SeatService {
         seat.setCar(carMapper.toEntity(carService.getCarById(dto.getCar()), trainRepository));
         seat.setSeatNumber(dto.getSeatNumber());
         seat.setIsAvailable(dto.getIsAvailable());
-        //bookings
         return seatMapper.toDTO(seatRepository.save(seat));
     }
 

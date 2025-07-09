@@ -17,7 +17,7 @@ public class CityService {
     private final CityMapper cityMapper;
 
     public List<CityDTO> getAllCities() {
-        return cityRepository.findAll().stream().map(cityMapper::toDTOWithStations).toList();
+        return cityRepository.findAll().stream().map(cityMapper::toDTO).toList();
     }
 
     public CityDTO getCityById(Long id) {

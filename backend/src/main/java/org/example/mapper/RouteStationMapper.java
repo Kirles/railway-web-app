@@ -14,8 +14,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RouteStationMapper {
 
-    @Mapping(target = "station", source = "station.name")
-    @Mapping(target = "route", source = "route.name")
+    @Mapping(target = "station", source = "station.id")
+    @Mapping(target = "route", source = "route.id")
     RouteStationDTO toDTO(RouteStation routeStation);
 
     @Mapping(target = "station", expression = "java(mapStation(routeStationDTO.getStation(), stationRepository))")
@@ -24,22 +24,14 @@ public interface RouteStationMapper {
                           @Context StationRepository stationRepository,
                           @Context RouteRepository routeRepository);
 
-    List<RouteStationDTO> toDTOList(List<Station> stations);
-
-    default Station mapStation(String stationName, @Context StationRepository stationRepository) {
-        if (stationName == null) {
-            return null;
-        }
-        return stationRepository.findByName(stationName)
-                .orElseThrow(() -> new RuntimeException("Station not found: " + stationName));
+    default Station mapStation(Long stationId, @Context StationRepository stationRepository) {
+        return stationRepository.findById(stationId)
+                .orElseThrow(() -> new RuntimeException("Station not found: " + stationId));
     }
 
-    default Route mapRoute(String routeName, @Context RouteRepository routeRepository) {
-        if (routeName == null) {
-            return null;
-        }
-        return routeRepository.findByName(routeName)
-                .orElseThrow(() -> new RuntimeException("Station not found: " + routeName));
+    default Route mapRoute(Long routeId, @Context RouteRepository routeRepository) {
+        return routeRepository.findById(routeId)
+                .orElseThrow(() -> new RuntimeException("Route not found: " + routeId));
     }
 
 }

@@ -20,10 +20,10 @@ public class TripDTO {
     private Long id;
 
     @NotBlank(message = "Поезд обязателен")
-    private String train;
+    private Long train;
 
     @NotBlank(message = "Маршрут обязателен")
-    private String route;
+    private Long route;
 
     @NotNull(message = "Дата отправления обязательна")
     @Future(message = "Дата отправления должна быть в будущем")

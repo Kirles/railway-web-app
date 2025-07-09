@@ -15,14 +15,11 @@ public interface SeatMapper {
     @Mapping(target = "bookings", ignore = true)
     SeatDTO toDTO(Seat seat);
 
-    @Mapping(target = "car", expression = "java(map(seatDTO.getCar(), carRepository))")
+    @Mapping(target = "car", expression = "java(mapCar(seatDTO.getCar(), carRepository))")
     @Mapping(target = "bookings", ignore = true)
     Seat toEntity(SeatDTO seatDTO, @Context CarRepository carRepository);
 
-    default Car map(Long carId, @Context CarRepository carRepository) {
-        if (carId == null) {
-            return null;
-        }
+    default Car mapCar(Long carId, @Context CarRepository carRepository) {
         return carRepository.findById(carId)
                 .orElseThrow(() -> new RuntimeException("Car not found: " + carId));
     }

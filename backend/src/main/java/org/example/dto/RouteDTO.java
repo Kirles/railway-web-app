@@ -20,10 +20,10 @@ public class RouteDTO {
     private String name;
 
     @NotNull(message = "Станция отправления обязательна")
-    private String departureStation;
+    private Long departureStation;
 
     @NotNull(message = "Станция прибытия обязательна")
-    private String arrivalStation;
+    private Long arrivalStation;
 
     @Min(value = 1, message = "Расстояние должно быть больше 0")
     private Integer distanceKm;

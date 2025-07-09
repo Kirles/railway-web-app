@@ -52,15 +52,14 @@ public class TripService {
         Trip trip = tripRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Trip not found with id " + id));
         trip.setId(dto.getId());
-        trip.setTrain(trainMapper.toEntity(trainService.getTrainByNumber(dto.getTrain())));
-        trip.setRoute(routeMapper.toEntity(routeService.getRouteByName(dto.getRoute()), stationRepository));
+        trip.setTrain(trainMapper.toEntity(trainService.getTrainById(dto.getTrain())));
+        trip.setRoute(routeMapper.toEntity(routeService.getRouteById(dto.getRoute()), stationRepository));
         trip.setDepartureDate(dto.getDepartureDate());
         trip.setDepartureTime(dto.getDepartureTime());
         trip.setArrivalDate(dto.getArrivalDate());
         trip.setArrivalTime(dto.getArrivalTime());
         trip.setAvailableSeats(dto.getAvailableSeats());
         trip.setBasePrice(dto.getBasePrice());
-        //booking tripSchedules
         return tripMapper.toDTO(tripRepository.save(trip));
     }
 

@@ -13,8 +13,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TripMapper {
 
-    @Mapping(target = "train", source = "train.number")
-    @Mapping(target = "route", source = "route.name")
+    @Mapping(target = "train", source = "train.id")
+    @Mapping(target = "route", source = "route.id")
     @Mapping(target = "bookings", ignore = true)
     @Mapping(target = "tripSchedules", ignore = true)
     TripDTO toDTO(Trip trip);
@@ -27,18 +27,13 @@ public interface TripMapper {
                   @Context TrainRepository trainRepository,
                   @Context RouteRepository routeRepository);
 
-    default Train mapTrain(String trainNumber, @Context TrainRepository trainRepository) {
-        if (trainNumber == null) {
-            return null;
-        }
-        return trainRepository.findByNumber(trainNumber)
-                .orElseThrow(() -> new RuntimeException("Train not found: " + trainNumber));
+    default Train mapTrain(Long trainId, @Context TrainRepository trainRepository) {
+        return trainRepository.findById(trainId)
+                .orElseThrow(() -> new RuntimeException("Train not found: " + trainId));
     }
-    default Route mapRoute(String routeName, @Context RouteRepository routeRepository) {
-        if (routeName == null) {
-            return null;
-        }
-        return routeRepository.findByName(routeName)
-                .orElseThrow(() -> new RuntimeException("Route not found: " + routeName));
+
+    default Route mapRoute(Long routeId, @Context RouteRepository routeRepository) {
+        return routeRepository.findById(routeId)
+                .orElseThrow(() -> new RuntimeException("Route not found: " + routeId));
     }
 }
