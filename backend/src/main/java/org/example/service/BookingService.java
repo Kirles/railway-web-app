@@ -7,7 +7,7 @@ import org.example.entities.Booking;
 import org.example.mapper.BookingMapper;
 import org.example.repository.BookingRepository;
 import org.example.repository.PassengerRepository;
-import org.example.repository.TrainRepository;
+import org.example.repository.SeatRepository;
 import org.example.repository.TripRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final TripRepository tripRepository;
     private final PassengerRepository passengerRepository;
+    private final SeatRepository seatRepository;
     private final BookingMapper bookingMapper;
 
 
@@ -33,19 +34,19 @@ public class BookingService {
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found with id " + id));
     }
 
-    public BookingDTO createCar(BookingDTO dto) {
-        Booking booking = bookingMapper.toEntity(dto, tripRepository, passengerRepository);
+    public BookingDTO createBooking(BookingDTO dto) {
+        Booking booking = bookingMapper.toEntity(dto, tripRepository, passengerRepository, seatRepository);
         Booking saved = bookingRepository.save(booking);
         return bookingMapper.toDTO(saved);
     }
 
-    public BookingDTO updateCar(Long id, BookingDTO dto) {
+    public BookingDTO updateBooking(Long id, BookingDTO dto) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found with id " + id));
         return bookingMapper.toDTO(bookingRepository.save(booking));
     }
 
-    public void deleteCar(Long id) {
+    public void deleteBooking(Long id) {
         if (!bookingRepository.existsById(id)) {
             throw new EntityNotFoundException("Booking not found with id " + id);
         }

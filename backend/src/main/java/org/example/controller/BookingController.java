@@ -3,7 +3,6 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.BookingDTO;
-import org.example.dto.CarDTO;
 import org.example.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,19 +31,19 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<BookingDTO> createBooking(@Valid @RequestBody BookingDTO dto) {
-        BookingDTO createdBooking  = bookingService.createCar(dto);
+        BookingDTO createdBooking  = bookingService.createBooking(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BookingDTO> updateBooking(@PathVariable Long id, @RequestBody BookingDTO dto) {
-        BookingDTO updatedBooking = bookingService.updateCar(id, dto);
+        BookingDTO updatedBooking = bookingService.updateBooking(id, dto);
         return ResponseEntity.ok(updatedBooking);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
-        bookingService.deleteCar(id);
+        bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
     }
 
