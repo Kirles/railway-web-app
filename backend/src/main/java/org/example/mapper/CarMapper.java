@@ -11,19 +11,16 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CarMapper {
 
-    @Mapping(target = "train", source = "train.name")
+    @Mapping(target = "train", source = "train.id")
     @Mapping(target = "seats", ignore = true)
     CarDTO toDTO(Car car);
 
-    @Mapping(target = "train", expression = "java(map(carDTO.getTrain(), trainRepository))")
+    @Mapping(target = "train", expression = "java(mapTrain(carDTO.getTrain(), trainRepository))")
     @Mapping(target = "seats", ignore = true)
     Car toEntity(CarDTO carDTO, @Context TrainRepository trainRepository);
 
-    default Train map(String trainNumber, @Context TrainRepository trainRepository) {
-        if (trainNumber == null) {
-            return null;
-        }
-        return trainRepository.findByNumber(trainNumber)
-                .orElseThrow(() -> new RuntimeException("Train not found: " + trainNumber));
+    default Train mapTrain(Long trainId, @Context TrainRepository trainRepository) {
+        return trainRepository.findById(trainId)
+                .orElseThrow(() -> new RuntimeException("Train not found: " + trainId));
     }
 }

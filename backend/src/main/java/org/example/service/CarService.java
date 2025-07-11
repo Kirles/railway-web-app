@@ -41,7 +41,7 @@ public class CarService {
     public CarDTO updateCar(Long id, CarDTO dto) {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car not found with id " + id));
-        car.setTrain(trainMapper.toEntity(trainService.getTrainByNumber(dto.getTrain())));
+        car.setTrain(trainMapper.toEntity(trainService.getTrainById(dto.getTrain())));
         car.setCarType(dto.getCarType());
         car.setCarNumber(dto.getCarNumber());
         car.setTotalSeats(dto.getTotalSeats());

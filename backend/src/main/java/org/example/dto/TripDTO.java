@@ -19,10 +19,10 @@ import java.util.List;
 public class TripDTO {
     private Long id;
 
-    @NotBlank(message = "Поезд обязателен")
+    @NotNull(message = "Поезд обязателен")
     private Long train;
 
-    @NotBlank(message = "Маршрут обязателен")
+    @NotNull(message = "Маршрут обязателен")
     private Long route;
 
     @NotNull(message = "Дата отправления обязательна")

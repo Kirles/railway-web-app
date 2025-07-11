@@ -1,15 +1,196 @@
+Cities:
 {
-    "route": "Рейс 12А",
-    "station": "Станция 1",
-    "stationOrder": 1,
-    "stopDurationMinutes": 5
+    "name": "Киев",
+    "region": "Киевская область"
 }
+
+{
+    "name": "Белая Церковь",
+    "region": "Киевская область"
+}
+
+{
+    "name": "Фастов",
+    "region": "Киевская область"
+}
+
+{
+    "name": "Харьков",
+    "region": "Харьковская область"
+}
+
+{
+    "name": "Пятихатки",
+    "region": "Харьковская область"
+}
+
+Stations:
+
+{
+    "name": "Киев - Станция 1",
+    "code": "11111",
+    "city" : 1,
+    "address": "ул. Адресс 1"
+}
+
+{
+    "name": "Харьков - Станция 2",
+    "code": "22222",
+    "city" : 2,
+    "address": "ул. Адресс 2"
+}
+
+{
+    "name": "Белая Церковь - Станция 3",
+    "code": "33333",
+    "city" : 3,
+    "address": "ул. Адресс 3"
+}
+
+{
+    "name": "Пятихатки - Станция 4",
+    "code": "44444",
+    "city" : 4,
+    "address": "ул. Адресс 4"
+}
+
+{
+    "name": "Фастов - Станция 5",
+    "code": "55555",
+    "city" : 5,
+    "address": "ул. Адресс 5"
+}
+
+Trains:
+
+{
+    "number": "1111К",
+    "name": "Киевский пассажирский",
+    "trainType" : "Купе",
+    "totalSeats": 100
+}
+
+{
+    "number": "1111Х",
+    "name": "Харьковский пассажирский",
+    "trainType" : "Плацкарт",
+    "totalSeats": 100
+}
+
+Cars:
+
+{
+    "train": 1,
+    "carType": "Плацкарт",
+    "carNumber" : 1,
+    "totalSeats": 25
+}
+
+Seats:
+
+{
+    "car": 1,
+    "seatNumber": 1,
+    "isAvailable" : true
+}
+
+Passengers:
+
+{
+    "firstName": "Кирилл",
+    "lastName": "Буштец",
+    "documentNumber" : 12345,
+    "phone" : "+380971430364",
+    "birthDate": "2003-08-06"
+}
+
+Routes:
 
 {
     "name": "Киев - Харьков",
-    "departureStation": "Станция 1",
-    "arrivalStation": "Станция 2",
-    "distanceKm": 550,
-    "durationMinutes": 540
+    "departureStation": 1,
+    "arrivalStation" : 4,
+    "distanceKm" : 500,
+    "durationMinutes": 360
 }
 
+{
+    "name": "Белая Церковь - Фастов",
+    "departureStation": 2,
+    "arrivalStation" : 3,
+    "distanceKm" : 100,
+    "durationMinutes": 80
+}
+
+Route Stations:
+
+{
+    "route": 2,
+    "station": 4,
+    "stationOrder" : 3,
+    "stopDurationMinutes" : 15
+}
+
+Trips:
+
+{
+    "train": 1,
+    "route": 1,
+    "departureDate" : "2025-07-12",
+    "departureTime" : "11:30",
+    "arrivalDate": "2025-07-12",
+    "arrivalTime": "17:30",
+    "availableSeats": 100,
+    "basePrice": 350
+}
+
+Trip Schedules:
+
+{
+    "trip": 1,
+    "station": 4,
+    "arrivalTime" : "11:15",
+    "departureTime" : "11:30",
+    "stationOrder": 1
+}
+
+{
+    "trip": 1,
+    "station": 1,
+    "arrivalTime" : "11:15",
+    "departureTime" : "11:30",
+    "stationOrder": 1
+}
+
+{
+    "trip": 1,
+    "station": 3,
+    "arrivalTime" : "17:30",
+    "departureTime" : "17:45",
+    "stationOrder": 2
+}
+
+{
+    "trip": 1,
+    "station": 3,
+    "arrivalTime" : "13:55",
+    "departureTime" : "14:00",
+    "stationOrder": 2
+}
+
+{
+    "trip": 1,
+    "station": 4,
+    "arrivalTime" : "17:30",
+    "departureTime" : "17:45",
+    "stationOrder": 3
+}
+
+Bookings:
+
+{
+    "trip": 1,
+    "passenger": 1,
+    "seat" : 15,
+    "price": 350
+}

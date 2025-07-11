@@ -15,8 +15,8 @@ import java.util.List;
 public class CarDTO {
     private Long id;
 
-    @NotBlank(message = "Поезд обязателен")
-    private String train;
+    @NotNull(message = "Поезд обязателен")
+    private Long train;
 
     @NotBlank(message = "Тип вагона обязателен")
     @Size(max = 100, message = "Тип вагона не должен превышать 100 символов")
