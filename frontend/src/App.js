@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit, Trash2, Save, X, Train, Users, Calendar, MapPin, Home, Settings, Search } from 'lucide-react';
 
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080/api'; // твой реальный бекенд
+const BASE_URL = 'http://localhost:8081/api';
 
 const api = {
   get: (endpoint) => axios.get(`${BASE_URL}${endpoint}`),
@@ -101,12 +101,12 @@ const AdminPanel = ({ navigate }) => {
     { name: 'cities', label: 'Cities', icon: MapPin },
     { name: 'passengers', label: 'Passengers', icon: Users },
     { name: 'routes', label: 'Routes', icon: MapPin },
-    { name: 'route-stations', label: 'Route Stations', icon: MapPin },
+    { name: 'routeStations', label: 'Route Stations', icon: MapPin },
     { name: 'seats', label: 'Seats', icon: Train },
     { name: 'stations', label: 'Stations', icon: MapPin },
     { name: 'trains', label: 'Trains', icon: Train },
     { name: 'trips', label: 'Trips', icon: Calendar },
-    { name: 'trip-schedules', label: 'Trip Schedules', icon: Calendar },
+    { name: 'tripSchedules', label: 'Trip Schedules', icon: Calendar },
   ];
 
   return (
@@ -141,11 +141,7 @@ const AdminResourcePage = ({ resource, navigate }) => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({});
 
-  useEffect(() => {
-    fetchData();
-  }, [resource]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/${resource}`);
@@ -155,12 +151,16 @@ const AdminResourcePage = ({ resource, navigate }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [resource]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleCreate = async (item) => {
     try {
       await api.post(`/${resource}`, item);
-      fetchData();
+      await fetchData();
       setShowForm(false);
       setFormData({});
     } catch (err) {
@@ -171,7 +171,7 @@ const AdminResourcePage = ({ resource, navigate }) => {
   const handleUpdate = async (id, item) => {
     try {
       await api.put(`/${resource}/${id}`, item);
-      fetchData();
+      await fetchData();
       setEditingItem(null);
     } catch (err) {
       setError(err.message);
@@ -182,7 +182,7 @@ const AdminResourcePage = ({ resource, navigate }) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
       try {
         await api.delete(`/${resource}/${id}`);
-        fetchData();
+        await fetchData();
       } catch (err) {
         setError(err.message);
       }
@@ -191,17 +191,17 @@ const AdminResourcePage = ({ resource, navigate }) => {
 
   const getFieldsForResource = () => {
     const fieldsMap = {
-      bookings: ['passengerName', 'seatId', 'status', 'bookingDate'],
-      cars: ['trainId', 'carNumber', 'carType', 'totalSeats'],
-      cities: ['name', 'region', 'country'],
-      passengers: ['firstName', 'lastName', 'email', 'phone'],
-      routes: ['name', 'startCityId', 'endCityId'],
-      'route-stations': ['routeId', 'stationId', 'orderNumber'],
-      seats: ['carId', 'seatNumber', 'seatType', 'isAvailable'],
-      stations: ['name', 'cityId', 'address'],
-      trains: ['trainNumber', 'trainType', 'totalCars'],
-      trips: ['name', 'departureStation', 'arrivalStation', 'distanceKm', 'durationMinutes'],
-      'trip-schedules': ['tripId', 'departureTime', 'arrivalTime', 'date'],
+      bookings: ['trip', 'passenger', 'seat', 'bookingDate'],
+      cars: ['train', 'carType', 'carNumber', 'totalSeats'],
+      cities: ['name', 'region'],
+      passengers: ['firstName', 'lastName', 'documentNumber', 'phone', 'birthDate'],
+      routes: ['name', 'departureStation', 'arrivalStation', 'route-distanceKm', 'durationMinutes'],
+      routeStations: ['route', 'station', 'stationOrder', 'stopDurationMinutes'],
+      seats: ['car', 'seatNumber', 'isAvailable'],
+      stations: ['name', 'code', 'city', 'address'],
+      trains: ['number', 'name', 'trainType', 'totalSeats'],
+      trips: ['train', 'route', 'departureDate', 'departureTime', 'arrivalDate', 'arrivalTime', 'availableSeats', 'basePrice'],
+      tripSchedules: ['trip', 'station', 'arrivalTime', 'departureTime', 'stationOrder'],
     };
     return fieldsMap[resource] || ['name'];
   };
@@ -464,7 +464,7 @@ const UserBookingPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {trips.map(trip => (
                 <div key={trip.id} className="bg-white p-4 rounded-lg shadow border">
-                  <h4 className="font-semibold text-lg">{trip.name}</h4>
+                  <h4 className="font-semibold text-lg">{trip.route}</h4>
                   <p className="text-gray-600">{trip.departureStation} → {trip.arrivalStation}</p>
                   <p className="text-sm text-gray-500">
                     Distance: {trip.distanceKm} km | Duration: {Math.floor(trip.durationMinutes / 60)}h {trip.durationMinutes % 60}m
@@ -484,7 +484,7 @@ const UserBookingPage = () => {
                     <div>
                       <h4 className="font-semibold">Seat {seat.seatNumber}</h4>
                       <p className="text-sm text-gray-600">Type: {seat.seatType}</p>
-                      <p className="text-sm text-gray-600">Car ID: {seat.carId}</p>
+                      <p className="text-sm text-gray-600">Car ID: {seat.car}</p>
                     </div>
                     <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
                   Available
