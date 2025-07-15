@@ -1,15 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Edit, Trash2, Save, X, Train, Users, Calendar, MapPin, Home, Settings, Search } from 'lucide-react';
-
-import axios from 'axios';
+import { Plus, Edit, Trash2, Save, X, Train, Calendar, MapPin, Home, Settings, Users, Search, ChevronLeft } from 'lucide-react';
 
 const BASE_URL = 'http://localhost:8081/api';
 
 const api = {
-  get: (endpoint) => axios.get(`${BASE_URL}${endpoint}`),
-  post: (endpoint, data) => axios.post(`${BASE_URL}${endpoint}`, data),
-  put: (endpoint, data) => axios.put(`${BASE_URL}${endpoint}`, data),
-  delete: (endpoint) => axios.delete(`${BASE_URL}${endpoint}`)
+  get: (endpoint) => fetch(`${BASE_URL}${endpoint}`).then(res => res.json()).then(data => ({ data })),
+  post: (endpoint, data) => fetch(`${BASE_URL}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(res => res.json()).then(data => ({ data })),
+  put: (endpoint, data) => fetch(`${BASE_URL}${endpoint}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(res => res.json()).then(data => ({ data })),
+  delete: (endpoint) => fetch(`${BASE_URL}${endpoint}`, {
+    method: 'DELETE'
+  }).then(res => {
+    if (!res.ok) {
+      throw new Error(`Failed to delete: ${res.status} ${res.statusText}`);
+    }
+    return { data: {} };
+  })
 };
 
 // Main App Component
@@ -23,45 +36,42 @@ const App = () => {
   };
 
   return (
-      <div className="min-h-screen bg-gray-50">
-        <nav className="bg-blue-600 text-white p-4">
-          <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <Train className="h-6 w-6" />
-              Railway System
-            </h1>
-            <div className="flex gap-4">
-              <button
-                  onClick={() => navigate('home')}
-                  className={`hover:bg-blue-700 px-3 py-2 rounded flex items-center gap-2 ${currentPage === 'home' ? 'bg-blue-700' : ''}`}
-              >
-                <Home className="h-4 w-4" />
-                Home
-              </button>
-              <button
-                  onClick={() => navigate('admin')}
-                  className={`hover:bg-blue-700 px-3 py-2 rounded flex items-center gap-2 ${currentPage === 'admin' ? 'bg-blue-700' : ''}`}
-              >
-                <Settings className="h-4 w-4" />
-                Admin Panel
-              </button>
-              <button
-                  onClick={() => navigate('user')}
-                  className={`hover:bg-blue-700 px-3 py-2 rounded flex items-center gap-2 ${currentPage === 'user' ? 'bg-blue-700' : ''}`}
-              >
-                <Search className="h-4 w-4" />
-                User Booking
-              </button>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        {/* Navigation */}
+        <nav className="bg-white shadow-lg border-b border-slate-200">
+          <div className="container mx-auto px-6 py-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-blue-600 rounded-xl">
+                    <Train className="h-6 w-6 text-white" />
+                  </div>
+                  <h1 className="text-2xl font-bold text-slate-800">Railway Admin System</h1>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                    onClick={() => navigate('home')}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                        currentPage === 'home'
+                            ? 'bg-blue-100 text-blue-700 shadow-sm'
+                            : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                >
+                  <Home className="h-4 w-4" />
+                  <span className="font-medium">Home</span>
+                </button>
+              </div>
             </div>
           </div>
         </nav>
 
-        <div className="container mx-auto">
+        {/* Main Content */}
+        <main className="container mx-auto px-6 py-8">
           {currentPage === 'home' && <HomePage navigate={navigate} />}
           {currentPage === 'admin' && !currentResource && <AdminPanel navigate={navigate} />}
           {currentPage === 'admin' && currentResource && <AdminResourcePage resource={currentResource} navigate={navigate} />}
-          {currentPage === 'user' && <UserBookingPage />}
-        </div>
+        </main>
       </div>
   );
 };
@@ -69,25 +79,28 @@ const App = () => {
 // Home Page
 const HomePage = ({ navigate }) => {
   return (
-      <div className="p-8 text-center">
-        <h2 className="text-4xl font-bold mb-8">Welcome to Railway Booking System</h2>
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <button
-              onClick={() => navigate('admin')}
-              className="bg-blue-600 text-white p-8 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Settings className="h-12 w-12 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-4">Admin Panel</h3>
-            <p>Manage bookings, trains, routes, and all system resources</p>
-          </button>
-          <button
-              onClick={() => navigate('user')}
-              className="bg-green-600 text-white p-8 rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <Search className="h-12 w-12 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-4">Book a Trip</h3>
-            <p>Search and book available seats for your journey</p>
-          </button>
+      <div className="text-center py-16">
+        <div className="max-w-2xl mx-auto">
+          <div className="mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-6">
+              <Train className="h-10 w-10 text-blue-600" />
+            </div>
+            <h2 className="text-4xl font-bold text-slate-800 mb-4">Welcome to Railway Admin System</h2>
+            <p className="text-xl text-slate-600">Manage all railway system resources efficiently and effectively</p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+            <h3 className="text-2xl font-semibold text-slate-800 mb-4">Get Started</h3>
+            <p className="text-slate-600 mb-6">Access the comprehensive admin panel to manage bookings, trains, routes, passengers, and more.</p>
+
+            <button
+                onClick={() => navigate('admin')}
+                className="inline-flex items-center space-x-3 bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <Settings className="h-6 w-6" />
+              <span className="text-lg font-medium">Open Admin Panel</span>
+            </button>
+          </div>
         </div>
       </div>
   );
@@ -96,34 +109,40 @@ const HomePage = ({ navigate }) => {
 // Admin Panel
 const AdminPanel = ({ navigate }) => {
   const resources = [
-    { name: 'bookings', label: 'Bookings', icon: Calendar },
-    { name: 'cars', label: 'Cars', icon: Train },
-    { name: 'cities', label: 'Cities', icon: MapPin },
-    { name: 'passengers', label: 'Passengers', icon: Users },
-    { name: 'routes', label: 'Routes', icon: MapPin },
-    { name: 'routeStations', label: 'Route Stations', icon: MapPin },
-    { name: 'seats', label: 'Seats', icon: Train },
-    { name: 'stations', label: 'Stations', icon: MapPin },
-    { name: 'trains', label: 'Trains', icon: Train },
-    { name: 'trips', label: 'Trips', icon: Calendar },
-    { name: 'tripSchedules', label: 'Trip Schedules', icon: Calendar },
+    { name: 'bookings', label: 'Bookings', icon: Calendar, color: 'bg-emerald-500', lightColor: 'bg-emerald-50' },
+    { name: 'cars', label: 'Cars', icon: Train, color: 'bg-blue-500', lightColor: 'bg-blue-50' },
+    { name: 'cities', label: 'Cities', icon: MapPin, color: 'bg-purple-500', lightColor: 'bg-purple-50' },
+    { name: 'passengers', label: 'Passengers', icon: Users, color: 'bg-orange-500', lightColor: 'bg-orange-50' },
+    { name: 'routes', label: 'Routes', icon: MapPin, color: 'bg-red-500', lightColor: 'bg-red-50' },
+    { name: 'routeStations', label: 'Route Stations', icon: MapPin, color: 'bg-indigo-500', lightColor: 'bg-indigo-50' },
+    { name: 'seats', label: 'Seats', icon: Train, color: 'bg-teal-500', lightColor: 'bg-teal-50' },
+    { name: 'stations', label: 'Stations', icon: MapPin, color: 'bg-cyan-500', lightColor: 'bg-cyan-50' },
+    { name: 'trains', label: 'Trains', icon: Train, color: 'bg-green-500', lightColor: 'bg-green-50' },
+    { name: 'trips', label: 'Trips', icon: Calendar, color: 'bg-yellow-500', lightColor: 'bg-yellow-50' },
+    { name: 'tripSchedules', label: 'Trip Schedules', icon: Calendar, color: 'bg-pink-500', lightColor: 'bg-pink-50' },
   ];
 
   return (
-      <div className="p-8">
-        <h2 className="text-3xl font-bold mb-8">Admin Panel</h2>
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="py-8">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-slate-800 mb-4">Admin Panel</h2>
+          <p className="text-xl text-slate-600">Choose a resource to manage</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {resources.map((resource) => {
             const IconComponent = resource.icon;
             return (
                 <button
                     key={resource.name}
                     onClick={() => navigate('admin', resource.name)}
-                    className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border text-left"
+                    className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200 hover:border-slate-300 transform hover:-translate-y-1"
                 >
-                  <IconComponent className="h-8 w-8 text-blue-600 mb-4" />
-                  <h3 className="text-xl font-semibold">{resource.label}</h3>
-                  <p className="text-gray-600 mt-2">Manage {resource.label.toLowerCase()}</p>
+                  <div className={`inline-flex items-center justify-center w-16 h-16 ${resource.lightColor} rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className={`h-8 w-8 ${resource.color.replace('bg-', 'text-')}`} />
+                  </div>
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2">{resource.label}</h3>
+                  <p className="text-sm text-slate-500">Manage {resource.label.toLowerCase()}</p>
                 </button>
             );
           })}
@@ -140,6 +159,7 @@ const AdminResourcePage = ({ resource, navigate }) => {
   const [editingItem, setEditingItem] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchData = useCallback(async () => {
     try {
@@ -191,7 +211,7 @@ const AdminResourcePage = ({ resource, navigate }) => {
 
   const getFieldsForResource = () => {
     const fieldsMap = {
-      bookings: ['trip', 'passenger', 'seat', 'bookingDate'],
+      bookings: ['trip', 'passenger', 'seat', 'bookingDate', 'price'],
       cars: ['train', 'carType', 'carNumber', 'totalSeats'],
       cities: ['name', 'region'],
       passengers: ['firstName', 'lastName', 'documentNumber', 'phone', 'birthDate'],
@@ -206,120 +226,182 @@ const AdminResourcePage = ({ resource, navigate }) => {
     return fieldsMap[resource] || ['name'];
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
-  if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
+  const filteredData = data.filter(item => {
+    const searchFields = getFieldsForResource();
+    return searchFields.some(field =>
+        item[field]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center py-16">
+          <div className="flex items-center space-x-3">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="text-slate-600 font-medium">Loading...</span>
+          </div>
+        </div>
+    );
+  }
+
+  if (error) {
+    return (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+          <div className="text-red-600 font-medium">Error: {error}</div>
+        </div>
+    );
+  }
 
   return (
-      <div className="p-8">
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
+      <div className="py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <button
+                  onClick={() => navigate('admin')}
+                  className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+              >
+                <ChevronLeft className="h-5 w-5" />
+                <span>Back to Admin Panel</span>
+              </button>
+            </div>
             <button
-                onClick={() => navigate('admin')}
-                className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
+                onClick={() => setShowForm(true)}
+                className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
-              ← Back to Admin Panel
+              <Plus className="h-5 w-5" />
+              <span>Add New</span>
             </button>
-            <h2 className="text-3xl font-bold capitalize">{resource.replace('-', ' ')}</h2>
           </div>
-          <button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Add New
-          </button>
+
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold text-slate-800 capitalize">{resource.replace(/([A-Z])/g, ' $1').toLowerCase()}</h2>
+
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+              <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
         </div>
 
+        {/* Form */}
         {showForm && (
-            <GenericForm
-                fields={getFieldsForResource()}
-                initialData={{}}
-                onSubmit={handleCreate}
-                onCancel={() => setShowForm(false)}
-                title={`Add New ${resource.replace('-', ' ')}`}
-            />
+            <div className="mb-8">
+              <GenericForm
+                  fields={getFieldsForResource()}
+                  initialData={{}}
+                  onSubmit={handleCreate}
+                  onCancel={() => setShowForm(false)}
+                  title={`Add New ${resource.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+              />
+            </div>
         )}
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                ID
-              </th>
-              {getFieldsForResource().map(field => (
-                  <th key={field} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {field.replace(/([A-Z])/g, ' $1').toLowerCase()}
-                  </th>
+        {/* Table */}
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200">
+              <thead className="bg-slate-50">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-r border-slate-200">
+                  ID
+                </th>
+                {getFieldsForResource().map((field, index) => (
+                    <th key={field} className={`px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider ${index < getFieldsForResource().length - 1 ? 'border-r border-slate-200' : ''}`}>
+                      {field.replace(/([A-Z])/g, ' $1').toLowerCase().replace(/^./, str => str.toUpperCase())}
+                    </th>
+                ))}
+                <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-l border-slate-200">
+                  Actions
+                </th>
+              </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-slate-100">
+              {filteredData.map((item, rowIndex) => (
+                  <tr key={item.id} className={`hover:bg-slate-50 transition-colors duration-150 ${rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-25'}`}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 border-r border-slate-100">
+                      {item.id}
+                    </td>
+                    {getFieldsForResource().map((field, colIndex) => (
+                        <td key={field} className={`px-6 py-4 whitespace-nowrap text-sm text-slate-700 ${colIndex < getFieldsForResource().length - 1 ? 'border-r border-slate-100' : ''}`}>
+                          {editingItem === item.id ? (
+                              <input
+                                  type="text"
+                                  value={formData[field] || ''}
+                                  onChange={(e) => setFormData({...formData, [field]: e.target.value})}
+                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              />
+                          ) : (
+                              <span className="block">
+                          {typeof item[field] === 'boolean' ? (
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item[field] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {item[field] ? 'Yes' : 'No'}
+                            </span>
+                          ) : (
+                              item[field]
+                          )}
+                        </span>
+                          )}
+                        </td>
+                    ))}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 border-l border-slate-100">
+                      {editingItem === item.id ? (
+                          <div className="flex items-center space-x-2">
+                            <button
+                                onClick={() => handleUpdate(item.id, formData)}
+                                className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-colors duration-200"
+                            >
+                              <Save className="h-4 w-4" />
+                            </button>
+                            <button
+                                onClick={() => {
+                                  setEditingItem(null);
+                                  setFormData({});
+                                }}
+                                className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-colors duration-200"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                      ) : (
+                          <div className="flex items-center space-x-2">
+                            <button
+                                onClick={() => {
+                                  setEditingItem(item.id);
+                                  setFormData(item);
+                                }}
+                                className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </button>
+                            <button
+                                onClick={() => handleDelete(item.id)}
+                                className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                      )}
+                    </td>
+                  </tr>
               ))}
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item) => (
-                <tr key={item.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {item.id}
-                  </td>
-                  {getFieldsForResource().map(field => (
-                      <td key={field} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {editingItem === item.id ? (
-                            <input
-                                type="text"
-                                value={formData[field] || ''}
-                                onChange={(e) => setFormData({...formData, [field]: e.target.value})}
-                                className="w-full px-2 py-1 border rounded"
-                            />
-                        ) : (
-                            typeof item[field] === 'boolean' ? (item[field] ? 'Yes' : 'No') : item[field]
-                        )}
-                      </td>
-                  ))}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {editingItem === item.id ? (
-                        <div className="flex gap-2">
-                          <button
-                              onClick={() => handleUpdate(item.id, formData)}
-                              className="text-green-600 hover:text-green-800"
-                          >
-                            <Save className="h-4 w-4" />
-                          </button>
-                          <button
-                              onClick={() => {
-                                setEditingItem(null);
-                                setFormData({});
-                              }}
-                              className="text-gray-600 hover:text-gray-800"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                    ) : (
-                        <div className="flex gap-2">
-                          <button
-                              onClick={() => {
-                                setEditingItem(item.id);
-                                setFormData(item);
-                              }}
-                              className="text-blue-600 hover:text-blue-800"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </button>
-                          <button
-                              onClick={() => handleDelete(item.id)}
-                              className="text-red-600 hover:text-red-800"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                    )}
-                  </td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
+
+          {filteredData.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-slate-500">No items found</div>
+              </div>
+          )}
         </div>
       </div>
   );
@@ -330,7 +412,9 @@ const GenericForm = ({ fields, initialData, onSubmit, onCancel, title }) => {
   const [formData, setFormData] = useState(initialData);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     onSubmit(formData);
   };
 
@@ -342,231 +426,52 @@ const GenericForm = ({ fields, initialData, onSubmit, onCancel, title }) => {
   };
 
   return (
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 className="text-xl font-semibold mb-4">{title}</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          {fields.map(field => (
-              <div key={field}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {field.replace(/([A-Z])/g, ' $1').toLowerCase()}
-                </label>
-                {field === 'isAvailable' ? (
-                    <select
-                        value={formData[field] || false}
-                        onChange={(e) => handleInputChange(field, e.target.value === 'true')}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value={true}>Yes</option>
-                      <option value={false}>No</option>
-                    </select>
-                ) : (
-                    <input
-                        type={field.includes('Id') || field.includes('Minutes') || field.includes('Km') || field.includes('Seats') ? 'number' : 'text'}
-                        value={formData[field] || ''}
-                        onChange={(e) => handleInputChange(field, e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                )}
-              </div>
-          ))}
-          <div className="md:col-span-2 flex gap-2">
+      <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+        <h3 className="text-2xl font-semibold text-slate-800 mb-6">{title}</h3>
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {fields.map(field => (
+                <div key={field} className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    {field.replace(/([A-Z])/g, ' $1').toLowerCase().replace(/^./, str => str.toUpperCase())}
+                  </label>
+                  {field === 'isAvailable' ? (
+                      <select
+                          value={formData[field] || false}
+                          onChange={(e) => handleInputChange(field, e.target.value === 'true')}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                      >
+                        <option value={true}>Yes</option>
+                        <option value={false}>No</option>
+                      </select>
+                  ) : (
+                      <input
+                          type={field.includes('Id') || field.includes('Minutes') || field.includes('Km') || field.includes('Seats') ? 'number' : 'text'}
+                          value={formData[field] || ''}
+                          onChange={(e) => handleInputChange(field, e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                          required
+                      />
+                  )}
+                </div>
+            ))}
+          </div>
+
+          <div className="flex items-center space-x-4 mt-8">
             <button
                 onClick={handleSubmit}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
             >
               Save
             </button>
             <button
                 onClick={onCancel}
-                className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                className="px-6 py-3 bg-slate-500 text-white rounded-xl hover:bg-slate-600 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
             >
               Cancel
             </button>
           </div>
         </div>
-      </div>
-  );
-};
-
-// User Booking Page
-const UserBookingPage = () => {
-  const [seats, setSeats] = useState([]);
-  const [trips, setTrips] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedSeat, setSelectedSeat] = useState(null);
-  const [showBookingForm, setShowBookingForm] = useState(false);
-  const [bookingData, setBookingData] = useState({
-    passengerName: '',
-    email: '',
-    phone: ''
-  });
-
-  useEffect(() => {
-    fetchSeatsAndTrips();
-  }, []);
-
-  const fetchSeatsAndTrips = async () => {
-    try {
-      setLoading(true);
-      const [seatsResponse, tripsResponse] = await Promise.all([
-        api.get('/seats'),
-        api.get('/trips')
-      ]);
-      setSeats(seatsResponse.data);
-      setTrips(tripsResponse.data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleBooking = async (e) => {
-    e.preventDefault();
-    try {
-      const bookingPayload = {
-        passengerName: bookingData.passengerName,
-        seatId: selectedSeat.id,
-        status: 'CONFIRMED',
-        bookingDate: new Date().toISOString().split('T')[0]
-      };
-
-      await api.post('/bookings', bookingPayload);
-      alert('Booking successful!');
-      setShowBookingForm(false);
-      setSelectedSeat(null);
-      setBookingData({ passengerName: '', email: '', phone: '' });
-      fetchSeatsAndTrips();
-    } catch (err) {
-      alert('Booking failed: ' + err.message);
-    }
-  };
-
-  const handleInputChange = (field, value) => {
-    setBookingData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  if (loading) return <div className="p-8">Loading...</div>;
-  if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
-
-  return (
-      <div className="p-8">
-        <h2 className="text-3xl font-bold mb-8">Book Your Journey</h2>
-
-        {/* Trips List */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">Available Trips</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {trips.map(trip => (
-                <div key={trip.id} className="bg-white p-4 rounded-lg shadow border">
-                  <h4 className="font-semibold text-lg">{trip.route}</h4>
-                  <p className="text-gray-600">{trip.departureStation} → {trip.arrivalStation}</p>
-                  <p className="text-sm text-gray-500">
-                    Distance: {trip.distanceKm} km | Duration: {Math.floor(trip.durationMinutes / 60)}h {trip.durationMinutes % 60}m
-                  </p>
-                </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Available Seats */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">Available Seats</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {seats.filter(seat => seat.isAvailable).map(seat => (
-                <div key={seat.id} className="bg-white p-4 rounded-lg shadow border hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h4 className="font-semibold">Seat {seat.seatNumber}</h4>
-                      <p className="text-sm text-gray-600">Type: {seat.seatType}</p>
-                      <p className="text-sm text-gray-600">Car ID: {seat.car}</p>
-                    </div>
-                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                  Available
-                </span>
-                  </div>
-                  <button
-                      onClick={() => {
-                        setSelectedSeat(seat);
-                        setShowBookingForm(true);
-                      }}
-                      className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
-                  >
-                    Book This Seat
-                  </button>
-                </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Booking Form Modal */}
-        {showBookingForm && selectedSeat && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                <h3 className="text-xl font-semibold mb-4">Book Seat {selectedSeat.seatNumber}</h3>
-                <div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Passenger Name
-                    </label>
-                    <input
-                        type="text"
-                        value={bookingData.passengerName}
-                        onChange={(e) => handleInputChange('passengerName', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
-                    </label>
-                    <input
-                        type="email"
-                        value={bookingData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone
-                    </label>
-                    <input
-                        type="tel"
-                        value={bookingData.phone}
-                        onChange={(e) => handleInputChange('phone', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                        onClick={handleBooking}
-                        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Confirm Booking
-                    </button>
-                    <button
-                        onClick={() => {
-                          setShowBookingForm(false);
-                          setSelectedSeat(null);
-                        }}
-                        className="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-        )}
       </div>
   );
 };
